@@ -1,0 +1,29 @@
+server:
+  port: 8082  # User Management Service runs on port 8082
+
+spring:
+  application:
+    name: UserManagementService  # Register with Eureka
+  datasource:
+    url: jdbc:mysql://localhost:3306/fishwagon_users?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update  # Change to `validate` in production
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+
+jwt:
+  secret: c29tZS1yYW5kb20tc2VjcmV0LWtleS13aXRoLWxvbmc=  # ✅ Ensure this key is set
+
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 30   # 🔹 Increase heartbeat interval
+    lease-expiration-duration-in-seconds: 90  # 🔹 Increase expiration duration
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true

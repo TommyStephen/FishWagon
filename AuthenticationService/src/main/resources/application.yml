@@ -1,0 +1,27 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: AuthenticationService
+  datasource:
+    url: jdbc:mysql://localhost:3306/fishwagon_auth?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+#   this test is coverted to base64String and assigned to secret
+#   your-secret-key-must-be-long-enough
+jwt:
+  secret: c29tZS1yYW5kb20tc2VjcmV0LWtleS13aXRoLWxvbmc=   # ✅ Ensure correct indentation
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true

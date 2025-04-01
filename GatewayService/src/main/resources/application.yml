@@ -1,0 +1,52 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8081/.well-known/jwks.json
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: AuthenticationService
+          uri: http://localhost:8081
+          predicates:
+            - Path=/auth/**
+
+        - id: JwksRoute
+          uri: http://localhost:8081
+          predicates:
+            - Path=/.well-known/jwks.json
+
+        - id: UserManagementService
+          uri: http://localhost:8082
+          predicates:
+            - Path=/users/**
+          filters:
+            - RemoveRequestHeader=Cookie
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+logging:
+  level:
+    "[com.fishwagon.gateway]": DEBUG
+    "[org.springframework.security]": INFO
+    "[org.springframework.cloud.gateway]": INFO
+
+jwt:
+  secret: c29tZS1yYW5kb20tc2VjcmV0LWtleS13aXRoLWxvbmc=
